@@ -1,40 +1,94 @@
 package com.garbagesto.json;
 
+import com.garbagesto.json.util.JsonMapper;
+
 import java.util.ArrayList;
+import java.util.List;
 
-public class JsonArray extends ArrayList<JsonValue<?>> implements JsonValue<JsonValue<?>[]>{
+public class JsonArray implements JsonValue<List<Object>> {
 
-    public JsonArray push(JsonValue<?> val){
-        this.add(val);
-        return this;
-    }
+    private final ArrayList<JsonValue<?>> _value = new ArrayList<>();
 
-    public String toJsonString(){
-        StringBuilder builder = new StringBuilder("[");
-        for( int i=0; i<size(); i++){
-            if( i>0 ){
-                builder.append(",");
+    @Override
+    public String toJsonString() {
+        StringBuilder work = new StringBuilder();
+        work.append("[");
+        boolean hasValue = false;
+        for( JsonValue<?> v: _value){
+            if( hasValue ){
+                work.append(",");
             }
-            builder.append(get(i).toJsonString());
+            work.append(v.toJsonString());
+            hasValue = true;
         }
-        builder.append("]");
-        return builder.toString();
+        work.append("]");
+        return work.toString();
     }
 
-    public JsonValue<?>[] getValue(){
-        return this.toArray(new JsonValue<?>[this.size()]); 
+    @Override
+    public List<Object> getValue() {
+        List<Object> ret = new ArrayList<>();
+        for( JsonValue<?> v: _value){
+            ret.add(v.getValue());
+        }
+        return ret;
     }
 
-    public String toString(){
-        return toJsonString();
+    @Override
+    public void setValue(List<Object> value) {
+        setValue(value.toArray());
     }
 
-    public int hashCode(){
+    public void setValue(Object[] value) {
+        List<JsonValue<?>> work = new ArrayList<>();
+        for( Object o: value){
+            JsonValue<?> v = JsonMapper.mapping(o);
+            work.add(v);
+        }
+        _value.clear();
+        _value.addAll(work);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if( o instanceof  JsonArray ){
+            return toJsonString().equals(((JsonArray) o).toJsonString());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
         return toJsonString().hashCode();
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends JsonValue<?>> T getObject(int index){
-        return (T)get(index);
+    public JsonArray push(Object v){
+        _value.add(JsonMapper.mapping(v));
+        return this;
+    }
+
+    public void clear(){
+        _value.clear();
+    }
+
+    public int size(){
+        return _value.size();
+    }
+
+    public String getJsonString(int i){
+        return _value.get(i).toJsonString();
+    }
+
+    public JsonValue<?> get(int i){
+        return _value.get(i);
+    }
+
+    public Object getValue(int i){
+        return _value.get(i).getValue();
+    }
+
+    @Override
+    public String toString() {
+        return "JsonArray" + toJsonString();
     }
 }

@@ -1,40 +1,59 @@
 package com.garbagesto.json;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.*;
 
-@RunWith(JUnit4.class)
 public class JsonNumberTest {
-    
-    @Test
-    public void getJsonString(){
-        assertEquals("10", new JsonNumber(10).toJsonString());
-        assertEquals("10", new JsonNumber(10L).toJsonString());
-        assertEquals("10.0", new JsonNumber(10.0).toJsonString());
-        assertEquals("10.0", new JsonNumber(10.0d).toJsonString());
-        assertEquals("10.0", new JsonNumber(10.00).toJsonString());
-        assertEquals("10.0", new JsonNumber(10.00d).toJsonString());
-        assertEquals("100.0", new JsonNumber(1e+2).toJsonString());
-        assertEquals("10", new JsonNumber(new BigDecimal(10)).toJsonString());
-        assertEquals("10.00", new JsonNumber(new BigDecimal("10.00")).toJsonString());
-        assertEquals("10.00", new JsonNumber("10.00").toJsonString());
-        assertEquals("10", new JsonNumber("10").toJsonString());
-        assertEquals("1E+1", new JsonNumber("1e+1").toJsonString());
-    }
 
     @Test
-    public void getValue(){
-        assertEquals(Long.valueOf(10), new JsonNumber(10).getValue());
-        assertEquals(Long.valueOf(100L), new JsonNumber(100).getValue());
-        assertEquals(Double.valueOf(10.0), new JsonNumber(10.0).getValue());
-        assertEquals(Double.valueOf(100.0), new JsonNumber(100.0d).getValue());
-        assertEquals(Double.valueOf(100.0), new JsonNumber(1e+2).getValue());
-        assertEquals(new BigDecimal(10.00), new JsonNumber(new BigDecimal(10.00)).getValue());
+    public void testSetValue(){
+        JsonNumber n = new JsonNumber();
+        assertEquals(new Integer(0), n.getValue());
+        assertEquals("0",n.toJsonString());
+
+        n.setValue(100);
+        assertEquals(new Integer(100),n.getValue());
+        assertEquals("100", n.toJsonString());
+
+        n.setValue(100L);
+        assertEquals(new Long(100),n.getValue());
+        assertEquals("100", n.toJsonString());
+
+        n.setValue(new BigInteger("1000"));
+        assertEquals(new BigInteger("1000"),n.getValue());
+        assertEquals("1000", n.toJsonString());
+
+        n.setValue(new BigDecimal("1000.1"));
+        assertEquals(new BigDecimal("1000.1"),n.getValue());
+        assertEquals("1000.1", n.toJsonString());
+
+        n.setValue(100.1f);
+        assertEquals(new Float(100.1),n.getValue());
+        assertEquals("100.1", n.toJsonString());
+
+        n.setValue(100.1d);
+        assertEquals(new Double(100.1),n.getValue());
+        assertEquals("100.1", n.toJsonString());
+
+        n.setValue("100");
+        assertEquals(new BigDecimal("100"),n.getValue());
+        assertEquals("100", n.toJsonString());
+
+        n.setValue("101e+10");
+        assertEquals(new BigDecimal("1.01e+12"),n.getValue());
+        assertEquals("1.01E+12", n.toJsonString());
+
+        n.setValue("-10");
+        assertEquals(new BigDecimal("-10"),n.getValue());
+        assertEquals("-10", n.toJsonString());
+
+        n.setValue("101e-10");
+        assertEquals(new BigDecimal("1.01e-8"),n.getValue());
+        assertEquals("1.01E-8",n.toJsonString());
     }
+
 }
-

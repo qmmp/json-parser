@@ -1,27 +1,28 @@
 package com.garbagesto.json;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.*;
 
-@RunWith(JUnit4.class)
-public class JsonStringTest{
+public class JsonStringTest {
 
     @Test
-    public void toJsonString(){
-        JsonString normal = new JsonString("test");
-        assertEquals("\"test\"", normal.toJsonString());
-        JsonString special = new JsonString("\"test\"\rcarige return\nline feed");
-        assertEquals("\"\\\"test\\\"\\rcarige return\\nline feed\"", special.toJsonString());
+    public void testToJsonString(){
+        JsonString str = new JsonString();
+        assertEquals("\"\"", str.toJsonString());
+        assertEquals("",str.getValue());
+        {
+            String value = "   test value  ";
+            str.setValue(value);
+            assertEquals("\""+value+"\"",str.toJsonString());
+            assertEquals(value, str.getValue());
+        }
+        {
+            String value = "a\"b\\c/d\be\ff\ng\rh\ti";
+            String jsonV = "a\\\"b\\\\c\\/d\\be\\ff\\ng\\rh\\ti";
+            str.setValue(value);
+            assertEquals("\""+jsonV+"\"",str.toJsonString());
+            assertEquals(value, str.getValue());
+        }
     }
 
-    @Test
-    public void getValue(){
-        String testValue = "\"test\"\rcarige return\nline feed";
-        JsonString test = new JsonString(testValue);
-        assertEquals(testValue, test.getValue());
-    }
-    
 }

@@ -1,52 +1,105 @@
 package com.garbagesto.json;
 
+import com.garbagesto.json.util.JsonMapper;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-public class JsonObject extends LinkedHashMap<JsonString,JsonValue<?>> implements JsonValue<Map<String,Object>> {
-    
-    public String toJsonString(){
-        StringBuilder builder = new StringBuilder("{");
-        for( Entry<JsonString,JsonValue<?>> entry: this.entrySet() ){
-            if( builder.length() > 1 ){
-                builder.append(",");
+public class JsonObject implements JsonValue<Map<String,Object>> {
+
+    private final Map<JsonString,JsonValue<?>> _value = new LinkedHashMap<>();
+
+    @Override
+    public String toJsonString() {
+        StringBuilder work = new StringBuilder();
+        work.append("{");
+        boolean hasData = false;
+        for(Map.Entry<JsonString,JsonValue<?>> e: _value.entrySet()){
+            if( hasData ){
+                work.append(",");
             }
-            builder.append(entry.getKey().toJsonString());
-            builder.append(":");
-            builder.append(entry.getValue().toJsonString());
+            work.append(e.getKey().toJsonString());
+            work.append(":");
+            work.append(e.getValue().toJsonString());
+            hasData = true;
         }
-        builder.append("}");
-        return builder.toString();
+        work.append("}");
+        return work.toString();
     }
 
-    public Map<String, Object> getValue(){
-        Map<String,Object> ret = new LinkedHashMap<>();
-        for( Entry<JsonString,JsonValue<?>> entry: this.entrySet() ){
-            ret.put(entry.getKey().getValue(),entry.getValue().getValue());
+    @Override
+    public Map<String, Object> getValue() {
+        Map<String, Object> ret = new LinkedHashMap<>();
+        for(Map.Entry<JsonString,JsonValue<?>> e: _value.entrySet()){
+            ret.put(e.getKey().getValue(),e.getValue().getValue());
         }
         return ret;
     }
 
-    public JsonObject push(JsonString key, JsonValue<?> value){
-        this.put(key,value);
+    @Override
+    public void setValue(Map<String, Object> value) {
+        Map<JsonString, JsonValue<?>> work = new LinkedHashMap<>();
+        for(Map.Entry<String,Object> e: value.entrySet()){
+            work.put(new JsonString(e.getKey()), JsonMapper.mapping(e.getValue()));
+        }
+        _value.clear();
+        _value.putAll(work);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if( o instanceof  JsonObject ){
+            return toJsonString().equals(((JsonObject) o).toJsonString());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return toJsonString().hashCode();
+    }
+
+    public JsonObject push(String key, Object v){
+        return push(new JsonString(key),v);
+    }
+
+    public JsonObject push(JsonString key, Object v){
+        _value.put(key,JsonMapper.mapping(v));
         return this;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends JsonValue<?>> T getObject(JsonString key){
-        return (T)get(key);
+    public void clear(){
+        _value.clear();
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends JsonValue<?>> T getObject(String key){
-        return (T)get(new JsonString(key));
+    public int size(){
+        return _value.size();
     }
 
-    public String toString(){
-        return toJsonString();
+    public String getJsonString(String key) {
+        return getJsonString(new JsonString(key));
+    }
+    public String getJsonString(JsonString key) {
+        return _value.get(key).toJsonString();
     }
 
-    public int hashCode(){
-        return toJsonString().hashCode();
-    }}
+    public JsonValue<?> get(String key) {
+        return get(new JsonString(key));
+    }
+    public JsonValue<?> get(JsonString key) {
+        return _value.get(key);
+    }
+
+    public Object getValue(String key) {
+        return getValue(new JsonString(key));
+    }
+    public Object getValue(JsonString key) {
+        return _value.get(key).getValue();
+    }
+
+    @Override
+    public String toString() {
+        return "JsonObject" + toJsonString() ;
+    }
+}
+

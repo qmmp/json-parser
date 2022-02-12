@@ -1,32 +1,48 @@
 package com.garbagesto.json;
 
+/**
+ * JsonNull value.
+ */
 public class JsonNull implements JsonValue<Object>{
 
+    /**
+     * JsonNull
+     */
     public static final JsonNull NULL = new JsonNull();
-
-    protected static final String NullString = "null";
 
     private JsonNull(){
 
     }
 
-    public String toJsonString(){
-        return "nulll";
+    @Override
+    public String toJsonString() {
+        return "null";
     }
 
     public Object getValue(){
         return null;
     }
-    
-    public String toString(){
-        return null;
+
+    @Override
+    public void setValue(Object value) {
+        //Nothing
     }
 
-    public int hashCode(){
-        return 0;
-    }
-
-    public boolean equals(Object o){
+    @Override
+    public boolean equals(Object obj) {
+        if( obj == null || obj instanceof JsonNull ){
+            return true;
+        }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return "null".hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "JsonNull";
     }
 }

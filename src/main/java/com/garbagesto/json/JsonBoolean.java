@@ -2,51 +2,51 @@ package com.garbagesto.json;
 
 public class JsonBoolean implements JsonValue<Boolean>{
 
-    public static final JsonBoolean TRUE = new JsonBoolean(true);
-    public static final JsonBoolean FALSE = new JsonBoolean(false);
-    protected static final String TrueString = "true";
-    protected static final String FalseString = "false";
+    private boolean _value = false;
 
-    public static JsonBoolean valueOf(String str) throws JsonException{
-        if( str == null ){
-            throw new NullPointerException("JsonBoolean is not null");
-        }
-        if(!str.equals(TrueString) && !str.equals(FalseString) ){
-            throw new JsonException(JsonException.ERROR.ILLEGAL_BOOLEAN_LITERAL,str);
-        }
-        if( Boolean.valueOf(str) ){
-            return JsonBoolean.TRUE;
+    public JsonBoolean(){
+    }
+
+    public JsonBoolean(boolean value){
+        _value = value;
+    }
+
+    @Override
+    public String toJsonString() {
+        if( _value ){
+            return "true";
         }else{
-            return JsonBoolean.FALSE;
+            return "false";
         }
     }
 
-    private final boolean _bool;
-
-    private JsonBoolean(boolean bool){
-        _bool = bool;
+    @Override
+    public Boolean getValue() {
+        return _value;
     }
 
-    public String toJsonString(){
-        return _bool? "true": "false";
+    @Override
+    public void setValue(Boolean value) {
+        _value = value;
     }
 
-    public Boolean getValue(){
-        return Boolean.valueOf(_bool);
-    }
-
-    public String toString(){
-        return toJsonString();
-    }
-
-    public int hashCode(){
-        return toJsonString().hashCode();
-    }
-
-    public boolean equals(Object o){
-        if( o instanceof JsonBoolean && o != null ){
-            return _bool == ((JsonBoolean)o)._bool;
+    @Override
+    public boolean equals(Object o) {
+        if( o instanceof Boolean ){
+            return _value == ((Boolean) o);
+        }else if( o instanceof JsonBoolean ){
+            return _value == ((JsonBoolean) o)._value;
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return (_value ? -1 : 0);
+    }
+
+    @Override
+    public String toString() {
+        return "JsonBoolean["+toJsonString()+"]";
     }
 }

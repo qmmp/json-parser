@@ -1,50 +1,76 @@
 package com.garbagesto.json;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
-public class JsonNumber implements JsonValue<Number> {
+public class JsonNumber implements JsonValue<Number>{
 
-    private final Number _value;
+    private Number _value = new Integer(0);
 
-    public JsonNumber(long val){
-        _value = val;
+    public JsonNumber(){
+
     }
 
-    public JsonNumber(double val){
-        _value = val;
+    public JsonNumber(Number value){
+        _value = value;
     }
 
-    public JsonNumber(BigDecimal val){
-        _value = val;
+    public JsonNumber(String value){
+        _value = new BigDecimal(value);
     }
 
-    public JsonNumber(String val){
-        _value = new BigDecimal(val);
-    }
-
-    public String toJsonString(){
+    @Override
+    public String toJsonString() {
         return _value.toString();
     }
 
-    public Number getValue(){
+    @Override
+    public Number getValue() {
         return _value;
     }
 
-    public String toString(){
-        return toJsonString();
+    @Override
+    public void setValue(Number value) {
+        _value = value;
     }
 
-    public int hashCode(){
-        return toJsonString().hashCode();
+    public void setValue(int v){
+        _value = new Integer(v);
     }
 
-    public boolean equals(Object o){
-        if( o instanceof JsonNumber && o != null ){
-            Number targetValue = new BigDecimal(((JsonNumber)o).getValue().toString());
-            BigDecimal thisV = new BigDecimal(_value.toString());
-            return targetValue.equals(thisV);
+    public void setValue(long v){
+        _value = new Long(v);
+    }
+
+    public void setValue(float v){
+        _value = new Float(v);
+    }
+
+    public void setValue(Double v){
+        _value = new Double(v);
+    }
+
+    public void setValue(String v){
+        _value = new BigDecimal(v);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if( o instanceof Number ){
+            return _value.equals(o.toString());
+        }else if( o instanceof JsonNumber ){
+            return _value.equals(((JsonNumber) o)._value);
         }
         return false;
     }
-    
+
+    @Override
+    public int hashCode() {
+        return _value.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "JsonNumber["+_value.toString()+"]";
+    }
 }

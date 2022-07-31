@@ -37,13 +37,14 @@ public class JsonObject implements JsonValue<Map<String,Object>> {
     }
 
     @Override
-    public void setValue(Map<String, Object> value) {
+    public JsonObject setValue(Map<String, Object> value) {
         Map<JsonString, JsonValue<?>> work = new LinkedHashMap<>();
         for(Map.Entry<String,Object> e: value.entrySet()){
             work.put(new JsonString(e.getKey()), JsonMapper.mapping(e.getValue()));
         }
         _value.clear();
         _value.putAll(work);
+        return this;
     }
 
     @Override

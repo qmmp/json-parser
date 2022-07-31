@@ -24,8 +24,8 @@ public class JsonNull implements JsonValue<Object>{
     }
 
     @Override
-    public void setValue(Object value) {
-        //Nothing
+    public JsonNull setValue(Object value) {
+        return NULL;
     }
 
     @Override

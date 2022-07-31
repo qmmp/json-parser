@@ -26,8 +26,9 @@ public class JsonBoolean implements JsonValue<Boolean>{
     }
 
     @Override
-    public void setValue(Boolean value) {
+    public JsonBoolean setValue(Boolean value) {
         _value = value;
+        return this;
     }
 
     @Override

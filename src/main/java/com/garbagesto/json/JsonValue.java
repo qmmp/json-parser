@@ -22,6 +22,6 @@ public interface JsonValue<T>{
      * set java type value
      * @param value
      */
-    public void setValue(T value);
+    public JsonValue<T> setValue(T value);
 
 }

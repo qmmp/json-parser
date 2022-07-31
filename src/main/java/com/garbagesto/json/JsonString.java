@@ -1,10 +1,6 @@
 package com.garbagesto.json;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Objects;
-
-public class JsonString implements JsonValue<String>{
+public class JsonString implements JsonValue<String>, CharSequence{
 
     private String _value;
 
@@ -47,8 +43,9 @@ public class JsonString implements JsonValue<String>{
     }
 
     @Override
-    public void setValue(String value) {
+    public JsonString setValue(String value) {
         _value = value==null?"":value;
+        return this;
     }
 
     @Override
@@ -69,5 +66,17 @@ public class JsonString implements JsonValue<String>{
     @Override
     public String toString() {
         return "JsonString["+_value+"]";
+    }
+    @Override
+    public int length() {
+        return _value.length();
+    }
+    @Override
+    public char charAt(int index) {
+        return _value.charAt(index);
+    }
+    @Override
+    public JsonString subSequence(int start, int end) {
+        return new JsonString(_value.substring(start,end));
     }
 }

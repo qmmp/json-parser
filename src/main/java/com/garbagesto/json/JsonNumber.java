@@ -1,11 +1,10 @@
 package com.garbagesto.json;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
-public class JsonNumber implements JsonValue<Number>{
+public class JsonNumber extends Number implements JsonValue<Number>{
 
-    private Number _value = new Integer(0);
+    private Number _value = Integer.valueOf(0);
 
     public JsonNumber(){
 
@@ -29,35 +28,45 @@ public class JsonNumber implements JsonValue<Number>{
         return _value;
     }
 
-    @Override
-    public void setValue(Number value) {
+    /**
+     * int、long、floatでの値設定で再起呼び出しが発生してしまうので実態をラッピング。
+     * @param value
+     * @return
+     */
+    private JsonNumber setValueNumber(Number value) {
         _value = value;
+        return this;
     }
 
-    public void setValue(int v){
-        _value = new Integer(v);
+    @Override
+    public JsonNumber setValue(Number value) {
+        return setValueNumber(value);
     }
 
-    public void setValue(long v){
-        _value = new Long(v);
+    public JsonNumber setValue(int v){
+        return setValueNumber(Integer.valueOf(v));
     }
 
-    public void setValue(float v){
-        _value = new Float(v);
+    public JsonNumber setValue(long v){
+        return setValueNumber(Long.valueOf(v));
     }
 
-    public void setValue(Double v){
-        _value = new Double(v);
+    public JsonNumber setValue(float v){
+        return setValueNumber(Float.valueOf(v));
     }
 
-    public void setValue(String v){
-        _value = new BigDecimal(v);
+    public JsonNumber setValue(Double v){
+        return setValueNumber(Double.valueOf(v));
+    }
+
+    public JsonNumber setValue(String v){
+        return setValueNumber(new BigDecimal(v));
     }
 
     @Override
     public boolean equals(Object o) {
         if( o instanceof Number ){
-            return _value.equals(o.toString());
+            return _value.equals((Number)o);
         }else if( o instanceof JsonNumber ){
             return _value.equals(((JsonNumber) o)._value);
         }
@@ -72,5 +81,25 @@ public class JsonNumber implements JsonValue<Number>{
     @Override
     public String toString() {
         return "JsonNumber["+_value.toString()+"]";
+    }
+
+    @Override
+    public int intValue() {
+        return _value.intValue();
+    }
+
+    @Override
+    public long longValue() {
+        return _value.longValue();
+    }
+
+    @Override
+    public float floatValue() {
+        return _value.floatValue();
+    }
+
+    @Override
+    public double doubleValue() {
+        return _value.doubleValue();
     }
 }

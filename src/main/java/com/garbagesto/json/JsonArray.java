@@ -35,8 +35,9 @@ public class JsonArray implements JsonValue<List<Object>> {
     }
 
     @Override
-    public void setValue(List<Object> value) {
+    public JsonArray setValue(List<Object> value) {
         setValue(value.toArray());
+        return this;
     }
 
     public void setValue(Object[] value) {

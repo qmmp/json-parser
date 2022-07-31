@@ -12,31 +12,31 @@ public class JsonNumberTest {
     @Test
     public void testSetValue(){
         JsonNumber n = new JsonNumber();
-        assertEquals(new Integer(0), n.getValue());
+        assertEquals(Integer.valueOf(0), n.getValue());
         assertEquals("0",n.toJsonString());
 
-        n.setValue(100);
-        assertEquals(new Integer(100),n.getValue());
+        assertEquals(Integer.valueOf(100),n.setValue(100).getValue());
+        assertEquals(Integer.valueOf(100),n.getValue());
         assertEquals("100", n.toJsonString());
 
-        n.setValue(100L);
-        assertEquals(new Long(100),n.getValue());
+        assertEquals(Integer.valueOf(100),n.setValue(100L).getValue());
+        assertEquals(Long.valueOf(100),n.getValue());
         assertEquals("100", n.toJsonString());
 
-        n.setValue(new BigInteger("1000"));
+        assertEquals(new BigInteger("1000"),n.setValue(new BigInteger("1000")).getValue());
         assertEquals(new BigInteger("1000"),n.getValue());
         assertEquals("1000", n.toJsonString());
 
-        n.setValue(new BigDecimal("1000.1"));
+        assertEquals(new BigDecimal("1000.1"),n.setValue(new BigDecimal("1000.1")).getValue());
         assertEquals(new BigDecimal("1000.1"),n.getValue());
         assertEquals("1000.1", n.toJsonString());
 
         n.setValue(100.1f);
-        assertEquals(new Float(100.1),n.getValue());
+        assertEquals(Float.valueOf((float)100.1),n.getValue());
         assertEquals("100.1", n.toJsonString());
 
         n.setValue(100.1d);
-        assertEquals(new Double(100.1),n.getValue());
+        assertEquals(Double.valueOf(100.1),n.getValue());
         assertEquals("100.1", n.toJsonString());
 
         n.setValue("100");

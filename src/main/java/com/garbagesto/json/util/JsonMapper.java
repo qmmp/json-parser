@@ -25,15 +25,16 @@ public class JsonMapper {
             return new JsonBoolean(((Boolean) o));
         }else if( o instanceof List ) {
             JsonArray array = new JsonArray();
-            array.setValue((List<Object>) o);
-            return array;
+            @SuppressWarnings("unchecked") List<Object> l = (List<Object>)o;
+            return array.setValue(l);
         }else if( o instanceof Object[] ) {
             JsonArray array = new JsonArray();
             array.setValue((Object[]) o);
             return array;
         }else if( o instanceof Map){
             JsonObject obj = new JsonObject();
-            for(Map.Entry<Object,Object> e: ((Map<Object, Object>) o).entrySet()){
+            @SuppressWarnings("unchecked") Map<Object,Object> m = (Map<Object,Object>)o;
+            for(Map.Entry<Object,Object> e: m.entrySet()){
                 JsonString key;
                 if( e.getKey() instanceof String ){
                     key = new JsonString((String)e.getKey());

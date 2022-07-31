@@ -42,14 +42,14 @@ public class MappingTest {
             assertEquals(new BigDecimal(100),v.getValue());
         }
         {
-            JsonValue<?> v = JsonMapper.mapping(new Integer(100));
+            JsonValue<?> v = JsonMapper.mapping(Integer.valueOf(100));
             assertTrue(v instanceof JsonNumber);
-            assertEquals(new Integer(100),v.getValue());
+            assertEquals(Integer.valueOf(100),v.getValue());
         }
         {
-            JsonValue<?> v = JsonMapper.mapping(new Long(100));
+            JsonValue<?> v = JsonMapper.mapping(Long.valueOf(100));
             assertTrue(v instanceof JsonNumber);
-            assertEquals(new Long(100),v.getValue());
+            assertEquals(Long.valueOf(100),v.getValue());
         }
         {
             JsonValue<?> v = JsonMapper.mapping(new BigInteger("100000"));
@@ -57,14 +57,14 @@ public class MappingTest {
             assertEquals(new BigInteger("100000"),v.getValue());
         }
         {
-            JsonValue<?> v = JsonMapper.mapping(new Float(100.1));
+            JsonValue<?> v = JsonMapper.mapping(Float.valueOf(100.1f));
             assertTrue(v instanceof JsonNumber);
-            assertEquals(new Float(100.1),v.getValue());
+            assertEquals(Float.valueOf(100.1f),v.getValue());
         }
         {
-            JsonValue<?> v = JsonMapper.mapping(new Double(100.1));
+            JsonValue<?> v = JsonMapper.mapping(Double.valueOf(100.1));
             assertTrue(v instanceof JsonNumber);
-            assertEquals(new Double(100.1),v.getValue());
+            assertEquals(Double.valueOf(100.1),v.getValue());
         }
     }
 
@@ -121,7 +121,7 @@ public class MappingTest {
         assertEquals(((JsonObject) v).get("def"),new JsonString("DEF"));
         assertEquals(((JsonObject) v).getValue("def"),"DEF");
         assertEquals(((JsonObject) v).get(key.toString()),new JsonNumber(100));
-        assertEquals(((JsonObject) v).getValue(key.toString()),new Integer(100));
+        assertEquals(((JsonObject) v).getValue(key.toString()),Integer.valueOf(100));
         assertTrue(((JsonObject) v).get("null") instanceof JsonNull);
         assertNull(((JsonObject) v).getValue("null"));
     }

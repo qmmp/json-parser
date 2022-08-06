@@ -19,7 +19,7 @@ public class JsonNumberTest {
         assertEquals(Integer.valueOf(100),n.getValue());
         assertEquals("100", n.toJsonString());
 
-        assertEquals(Integer.valueOf(100),n.setValue(100L).getValue());
+        assertEquals(Long.valueOf(100),n.setValue(100L).getValue());
         assertEquals(Long.valueOf(100),n.getValue());
         assertEquals("100", n.toJsonString());
 

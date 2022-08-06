@@ -65,10 +65,10 @@ public class JsonNumber extends Number implements JsonValue<Number>{
 
     @Override
     public boolean equals(Object o) {
-        if( o instanceof Number ){
-            return _value.equals((Number)o);
-        }else if( o instanceof JsonNumber ){
+        if( o instanceof JsonNumber ){
             return _value.equals(((JsonNumber) o)._value);
+        }else if( o instanceof Number ){
+            return _value.equals((Number)o);
         }
         return false;
     }

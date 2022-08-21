@@ -2,16 +2,16 @@ package com.garbagesto.json;
 
 import java.math.BigDecimal;
 
-public class JsonNumber extends Number implements JsonValue<Number>{
+public class JsonNumber extends Number implements JsonValue<BigDecimal>{
 
-    private Number _value = Integer.valueOf(0);
+    private BigDecimal _value = BigDecimal.ZERO;
 
     public JsonNumber(){
 
     }
 
     public JsonNumber(Number value){
-        _value = value;
+        _value = new BigDecimal(value.toString());
     }
 
     public JsonNumber(String value){
@@ -20,27 +20,28 @@ public class JsonNumber extends Number implements JsonValue<Number>{
 
     @Override
     public String toJsonString() {
-        return _value.toString();
+        return _value.toPlainString();
     }
 
     @Override
-    public Number getValue() {
+    public BigDecimal getValue() {
         return _value;
     }
 
     /**
-     * int、long、floatでの値設定で再起呼び出しが発生してしまうので実態をラッピング。
+     * int、long、float、doubleでの値設定で再起呼び出しが発生してしまうので実態をラッピング。
      * @param value
      * @return
      */
     private JsonNumber setValueNumber(Number value) {
-        _value = value;
+        _value = new BigDecimal(value.toString());
         return this;
     }
 
     @Override
-    public JsonNumber setValue(Number value) {
-        return setValueNumber(value);
+    public JsonNumber setValue(BigDecimal value) {
+        _value = value;
+        return this;
     }
 
     public JsonNumber setValue(int v){
@@ -66,9 +67,13 @@ public class JsonNumber extends Number implements JsonValue<Number>{
     @Override
     public boolean equals(Object o) {
         if( o instanceof JsonNumber ){
-            return _value.equals(((JsonNumber) o)._value);
+            return toJsonString().equals(((JsonNumber) o).toJsonString());
         }else if( o instanceof Number ){
-            return _value.equals((Number)o);
+            try{
+                return toJsonString().equals(new BigDecimal(o.toString()).toPlainString());
+            }catch(NumberFormatException e){
+                return false;
+            }
         }
         return false;
     }

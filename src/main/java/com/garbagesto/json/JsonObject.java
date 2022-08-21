@@ -2,8 +2,11 @@ package com.garbagesto.json;
 
 import com.garbagesto.json.util.JsonMapper;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 public class JsonObject implements JsonValue<Map<String,Object>> {
 
@@ -69,6 +72,16 @@ public class JsonObject implements JsonValue<Map<String,Object>> {
         return this;
     }
 
+    /**
+     * 指定の項目を取り除く。
+     * @param key
+     * @return
+     */
+    public JsonObject remove(JsonString key){
+        _value.remove(key);
+        return this;
+    }
+
     public void clear(){
         _value.clear();
     }
@@ -101,6 +114,18 @@ public class JsonObject implements JsonValue<Map<String,Object>> {
     @Override
     public String toString() {
         return "JsonObject" + toJsonString() ;
+    }
+
+    public Set<JsonString> keySet(){
+        return _value.keySet();
+    }
+
+    public Collection<JsonValue<?>> values(){
+        return _value.values();
+    }
+
+    public Set<Entry<JsonString, JsonValue<?>>> entrySet(){
+        return _value.entrySet();
     }
 }
 

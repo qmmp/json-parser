@@ -2,8 +2,11 @@ package com.garbagesto.json;
 
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import static org.junit.Assert.*;
 
@@ -55,5 +58,40 @@ public class JsonObjectTest {
         assertEquals("[\"a\",\"b\",\"c\"]",obj.getJsonString("array"));
         assertTrue(obj.get("map") instanceof JsonObject);
         assertEquals("{\"1\":\"2\"}",obj.getJsonString("map"));
+    }
+
+    @Test
+    public void mapMethodTest() throws Exception{
+        JsonObject obj = new JsonObject();
+        obj.push("test1", 10);        
+        obj.push("test2", 20);        
+        obj.push("test3", 30);
+        
+        Set<JsonString> keys = obj.keySet();
+        assertEquals(3, keys.size());
+        assertTrue(keys.contains(new JsonString("test1")));
+        assertTrue(keys.contains(new JsonString("test2")));
+        assertTrue(keys.contains(new JsonString("test3")));
+
+        Collection<JsonValue<?>> values = obj.values();
+        assertEquals(3, values.size());
+        assertTrue(values.contains(new JsonNumber("10")));
+        assertTrue(values.contains(new JsonNumber(20)));
+        assertTrue(values.contains(new JsonNumber(30L)));
+
+        Set<Entry<JsonString,JsonValue<?>>> entrySet = obj.entrySet();
+        assertEquals(3, entrySet.size());
+        for( Entry<JsonString,JsonValue<?>> entry: entrySet){
+            if( entry.getKey().equals(new JsonString("test1")) ){
+                assertEquals(new JsonNumber(10), entry.getValue());
+            }else if( entry.getKey().equals(new JsonString("test2")) ){
+                assertEquals(new JsonNumber(20), entry.getValue());
+            }else if( entry.getKey().equals(new JsonString("test3")) ){
+                assertEquals(new JsonNumber(30), entry.getValue());
+            }else{
+                fail();
+            }
+        }
+
     }
 }

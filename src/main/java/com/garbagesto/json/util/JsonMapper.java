@@ -2,6 +2,8 @@ package com.garbagesto.json.util;
 
 import com.garbagesto.json.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +19,10 @@ public class JsonMapper {
             return JsonNull.NULL;
         }else if( o instanceof JsonValue<?>){
             return (JsonValue<?>)o;
-        }else if( o instanceof Number ) {
-            JsonNumber n = new JsonNumber();
-            n.setValue((Number) o);
-            return n;
+        }else if( o instanceof BigDecimal ){
+            return new JsonNumber((BigDecimal)o);
+        }else if( o instanceof Integer | o instanceof Long | o instanceof Float | o instanceof Double | o instanceof BigInteger) {
+            return new JsonNumber(o.toString());
         }else if( o instanceof Boolean) {
             return new JsonBoolean(((Boolean) o));
         }else if( o instanceof List ) {

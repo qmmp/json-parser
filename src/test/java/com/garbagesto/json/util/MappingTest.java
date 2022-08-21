@@ -44,27 +44,27 @@ public class MappingTest {
         {
             JsonValue<?> v = JsonMapper.mapping(Integer.valueOf(100));
             assertTrue(v instanceof JsonNumber);
-            assertEquals(Integer.valueOf(100),v.getValue());
+            assertEquals(new BigDecimal(100),v.getValue());
         }
         {
             JsonValue<?> v = JsonMapper.mapping(Long.valueOf(100));
             assertTrue(v instanceof JsonNumber);
-            assertEquals(Long.valueOf(100),v.getValue());
+            assertEquals(new BigDecimal(100),v.getValue());
         }
         {
             JsonValue<?> v = JsonMapper.mapping(new BigInteger("100000"));
             assertTrue(v instanceof JsonNumber);
-            assertEquals(new BigInteger("100000"),v.getValue());
+            assertEquals(new BigDecimal("100000"),v.getValue());
         }
         {
             JsonValue<?> v = JsonMapper.mapping(Float.valueOf(100.1f));
             assertTrue(v instanceof JsonNumber);
-            assertEquals(Float.valueOf(100.1f),v.getValue());
+            assertEquals(new BigDecimal("100.1"),v.getValue());
         }
         {
             JsonValue<?> v = JsonMapper.mapping(Double.valueOf(100.1));
             assertTrue(v instanceof JsonNumber);
-            assertEquals(Double.valueOf(100.1),v.getValue());
+            assertEquals(new BigDecimal("100.1"),v.getValue());
         }
     }
 
@@ -121,7 +121,7 @@ public class MappingTest {
         assertEquals(((JsonObject) v).get("def"),new JsonString("DEF"));
         assertEquals(((JsonObject) v).getValue("def"),"DEF");
         assertEquals(((JsonObject) v).get(key.toString()),new JsonNumber(100));
-        assertEquals(((JsonObject) v).getValue(key.toString()),Integer.valueOf(100));
+        assertEquals(((JsonObject) v).getValue(key.toString()),new BigDecimal(100));
         assertTrue(((JsonObject) v).get("null") instanceof JsonNull);
         assertNull(((JsonObject) v).getValue("null"));
     }

@@ -2,6 +2,7 @@ package com.garbagesto.json;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -61,7 +62,7 @@ public class JsonArrayTest {
         assertTrue(array.get(1) instanceof JsonNumber);
         assertEquals("100", array.get(1).toJsonString());
         assertTrue(array.getValue(1) instanceof Number);
-        assertEquals(100, array.getValue(1));
+        assertEquals(new BigDecimal(100), array.getValue(1));
         assertEquals("100", array.getJsonString(1));
 
         assertTrue(array.get(2) instanceof JsonBoolean);

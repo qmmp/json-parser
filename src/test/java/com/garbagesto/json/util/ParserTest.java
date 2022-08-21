@@ -165,7 +165,7 @@ public class ParserTest {
 
             v = JsonParser.parse("123e+2");
             assertTrue(v instanceof JsonNumber);
-            assertEquals("1.23E+4",v.toJsonString());
+            assertEquals("12300",v.toJsonString());
             assertEquals(new BigDecimal("1.23e+4"),v.getValue());
 
             v = JsonParser.parse("123e-2");
@@ -175,7 +175,7 @@ public class ParserTest {
 
             v = JsonParser.parse("123e-10");
             assertTrue(v instanceof JsonNumber);
-            assertEquals("1.23E-8",v.toJsonString());
+            assertEquals("0.0000000123",v.toJsonString());
             assertEquals(new BigDecimal("1.23e-8"),v.getValue());
         }catch(JsonParseException e){
             fail(e.getMessage());

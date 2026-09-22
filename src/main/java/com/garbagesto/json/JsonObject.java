@@ -2,6 +2,7 @@ package com.garbagesto.json;
 
 import com.garbagesto.json.util.JsonMapper;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -94,7 +95,23 @@ public class JsonObject implements JsonValue<Map<String,Object>> {
         return getJsonString(new JsonString(key));
     }
     public String getJsonString(JsonString key) {
-        return _value.get(key).toJsonString();
+        JsonValue<?> val = _value.get(key);
+        if( val == null ){
+            return null;
+        }
+        return val.toJsonString();
+    }
+
+    public BigDecimal getJsonNumber(String key){
+        return getJsonNumner(new JsonString(key));
+    }
+
+    public BigDecimal getJsonNumner(JsonString key){
+        JsonValue<?> val = _value.get(key);
+        if( val instanceof JsonNumber ){
+            return ((JsonNumber)val).getValue();
+        }
+        return null;
     }
 
     public JsonValue<?> get(String key) {

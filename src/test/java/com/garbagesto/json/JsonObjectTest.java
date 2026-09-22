@@ -2,6 +2,7 @@ package com.garbagesto.json;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -43,21 +44,28 @@ public class JsonObjectTest {
                 obj.toJsonString());
 
         Map<Object,Object> map = new LinkedHashMap<>();
-        map.put("1","2");
+        map.put("num1",1);
+        map.put("num2","2");
         obj.push("map",map);
         assertEquals(6,obj.size());
         assertEquals(
-                "{\"abc\":\"ABC\",\"def\":\"DEF\",\"null\":null,\"null2\":null,\"array\":[\"a\",\"b\",\"c\"],\"map\":{\"1\":\"2\"}}",
+                "{\"abc\":\"ABC\",\"def\":\"DEF\",\"null\":null,\"null2\":null,\"array\":[\"a\",\"b\",\"c\"],\"map\":{\"num1\":1,\"num2\":\"2\"}}",
                 obj.toJsonString());
 
         assertTrue(obj.get("abc") instanceof JsonString);
         assertTrue(obj.get("def") instanceof JsonString);
         assertTrue(obj.get("null") instanceof JsonNull);
         assertTrue(obj.get("null2") instanceof JsonNull);
+        assertNull(obj.get("undefined"));
+        assertNull(obj.getJsonString("undefined"));
+        assertNull(obj.getJsonNumber("undefined"));
         assertTrue(obj.get("array") instanceof JsonArray);
         assertEquals("[\"a\",\"b\",\"c\"]",obj.getJsonString("array"));
         assertTrue(obj.get("map") instanceof JsonObject);
-        assertEquals("{\"1\":\"2\"}",obj.getJsonString("map"));
+        assertEquals("{\"num1\":1,\"num2\":\"2\"}",obj.getJsonString("map"));
+        JsonObject jsonObject = (JsonObject)obj.get("map");
+        assertEquals(new BigDecimal(1), jsonObject.getJsonNumber("num1"));
+        assertEquals(null, jsonObject.getJsonNumber("num2"));
     }
 
     @Test

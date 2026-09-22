@@ -21,7 +21,7 @@ public class JsonMapper {
             return (JsonValue<?>)o;
         }else if( o instanceof BigDecimal ){
             return new JsonNumber((BigDecimal)o);
-        }else if( o instanceof Integer | o instanceof Long | o instanceof Float | o instanceof Double | o instanceof BigInteger) {
+        }else if( o instanceof Integer || o instanceof Long || o instanceof Float || o instanceof Double || o instanceof BigInteger) {
             return new JsonNumber(o.toString());
         }else if( o instanceof Boolean) {
             return new JsonBoolean(((Boolean) o));

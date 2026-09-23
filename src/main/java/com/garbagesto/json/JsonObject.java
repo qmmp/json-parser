@@ -96,6 +96,9 @@ public class JsonObject implements JsonValue<Map<String,Object>> {
     }
     public String getJsonString(JsonString key) {
         JsonValue<?> val = _value.get(key);
+        if( val instanceof JsonString ){
+            return ((JsonString)val).getValue();
+        }
         if( val == null ){
             return null;
         }
@@ -120,13 +123,55 @@ public class JsonObject implements JsonValue<Map<String,Object>> {
     public JsonValue<?> get(JsonString key) {
         return _value.get(key);
     }
+    public <T extends JsonValue<?>> T get(String key, Class<T> c) {
+        return get(new JsonString(key),c);
+    }
+    public <T extends JsonValue<?>> T get(JsonString key, Class<T> c) {
+        JsonValue<?> val = _value.get(key);
+        if( c.isInstance(val) ){
+            return c.cast(val);
+        }
+        return null;
+    }
 
     public Object getValue(String key) {
         return getValue(new JsonString(key));
     }
     public Object getValue(JsonString key) {
+        JsonValue<?> val = _value.get(key);
+        if( val == null ){
+            return null;
+        }
         return _value.get(key).getValue();
     }
+
+    public String getStringValue(String key){
+        return getStringValue(new JsonString(key));
+    }
+
+    public String getStringValue(JsonString key){
+        JsonValue<?> val = get(key);
+        if( val == null ){
+            return null;
+        }
+        if( val instanceof JsonString ){
+            return ((JsonString)val).getValue();
+        }
+        return val.toJsonString();
+    }
+
+    public BigDecimal getNimberValue(String key){
+        return getNumberValue(new JsonString(key));
+    }
+
+    public BigDecimal getNumberValue(JsonString key){
+        JsonValue<?> val = get(key);
+        if( val instanceof JsonNumber ){
+            return ((JsonNumber)val).getValue();
+        }
+        return null;
+    }
+
 
     @Override
     public String toString() {

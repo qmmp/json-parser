@@ -45,6 +45,8 @@ public class JsonArrayTest {
         array.push(childList);
         assertEquals("[\"abc\",100,false,null,[],[\"ABC\"]]", array.toJsonString());
         assertEquals(6, array.size());
+        assertEquals("\"abc\"",array.getJsonString(0));
+        assertEquals(new BigDecimal(100),array.getJsonNumber(1));
 
         Map<String,String> childMap = new LinkedHashMap<>();
         childMap.put("def","DEF");

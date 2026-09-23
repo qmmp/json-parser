@@ -2,6 +2,7 @@ package com.garbagesto.json;
 
 import com.garbagesto.json.util.JsonMapper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,15 +78,58 @@ public class JsonArray implements JsonValue<List<Object>> {
     }
 
     public String getJsonString(int i){
-        return _value.get(i).toJsonString();
+        JsonValue<?> val = _value.get(i);
+        if( val != null ){
+            return _value.get(i).toJsonString();
+        }
+        return null;
+    }
+
+    public BigDecimal getJsonNumber(int i){
+        JsonValue<?> val = _value.get(i);
+        if( val instanceof JsonNumber ){
+            return ((JsonNumber)val).getValue();
+        }
+        return null;
     }
 
     public JsonValue<?> get(int i){
         return _value.get(i);
     }
 
+    public <T extends JsonValue<?>> T get(int i, Class<T> c){
+        JsonValue<?> val = _value.get(i);
+        if( c.isInstance(val) ){
+            return c.cast(val);
+        }
+        return null;
+    }
+
     public Object getValue(int i){
-        return _value.get(i).getValue();
+        JsonValue<?> val = _value.get(i);
+        if( val == null ){
+            return null;
+        }
+        return val.getValue();
+    }
+
+    public String getStringValue(int i){
+        JsonValue<?> val = _value.get(i);
+        if( val == null ){
+            return null;
+        }
+        if( val instanceof JsonString ){
+            return ((JsonString)val).getValue();
+        }
+        return val.toJsonString();
+    }
+
+    public BigDecimal getNumberValue(int i){
+        JsonValue<?> val = _value.get(i);
+        if( val instanceof JsonNumber ){
+            return ((JsonNumber)val).getValue();
+        }
+        return null;
     }
 
     @Override

@@ -53,6 +53,11 @@ public class JsonObjectTest {
                 obj.toJsonString());
 
         assertTrue(obj.get("abc") instanceof JsonString);
+        assertNull(obj.get("abc",JsonNumber.class));
+        assertEquals(obj.get("abc"), obj.get("abc",JsonString.class));
+        assertEquals("ABC", obj.getJsonString("abc"));
+        assertNull(obj.get("abc",JsonArray.class));
+        assertNull(obj.get("abc",JsonObject.class));
         assertTrue(obj.get("def") instanceof JsonString);
         assertTrue(obj.get("null") instanceof JsonNull);
         assertTrue(obj.get("null2") instanceof JsonNull);
